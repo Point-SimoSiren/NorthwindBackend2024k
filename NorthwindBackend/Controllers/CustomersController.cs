@@ -60,5 +60,20 @@ namespace NorthwindBackend.Controllers
             }
         }
 
+        // Uuden asiakkaan lisääminen
+        [HttpPost]
+        public ActionResult AddNew([FromBody] Customer customer)
+        {
+            try
+            {
+                db.Customers.Add(customer);
+                db.SaveChanges();
+                return Ok("Lisättiin asiakas: " + customer.CompanyName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Jotain meni pieleen. Lue lisää: " + ex.InnerException);
+            }
+        }
     }
 }
