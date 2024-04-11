@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NorthwindBackend.Models;
+using System.Diagnostics.Eventing.Reader;
 
 namespace NorthwindBackend.Controllers
 {
@@ -60,6 +61,7 @@ namespace NorthwindBackend.Controllers
             }
         }
 
+
         // Uuden asiakkaan lisääminen
         [HttpPost]
         public ActionResult AddNew([FromBody] Customer customer)
@@ -75,5 +77,24 @@ namespace NorthwindBackend.Controllers
                 return BadRequest("Jotain meni pieleen. Lue lisää: " + ex.InnerException);
             }
         }
+
+        // Poistotoiminnon toteuttaminen
+        [HttpDelete("{id}")]
+        public ActionResult DeleteById(string id) {
+            var asiakas = db.Customers.Find(id); // asiakas poimitaan käsittelyyn
+            if (asiakas != null)
+            {
+                db.Customers.Remove(asiakas); // poisto
+                db.SaveChanges(); // tallennus
+
+                //return Ok("Poistettu asiakas " + asiakas.CompanyNam);
+                return Ok($"Poistettu asiakas {asiakas.CompanyName}");
+            }
+            return NotFound("Asiakasta id:llä " + id + " ei löydy.");
+
+            }
+        
+
+    
     }
 }
