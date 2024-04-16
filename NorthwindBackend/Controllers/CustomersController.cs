@@ -91,10 +91,40 @@ namespace NorthwindBackend.Controllers
                 return Ok($"Poistettu asiakas {asiakas.CompanyName}");
             }
             return NotFound("Asiakasta id:llä " + id + " ei löydy.");
-
             }
-        
 
-    
+
+        // Muokkaustoiminto
+        [HttpPut("{id}")]
+        public ActionResult EditById(string id, [FromBody] Customer cust)
+        {
+            var asiakas = db.Customers.Find(id); // asiakas poimitaan käsittelyyn
+            if (asiakas != null)
+            {
+                // Asetetaan ominaisuuksien arvot asikkaalle
+                asiakas.CompanyName = cust.CompanyName;
+                asiakas.ContactName = cust.ContactName;
+                asiakas.Address = cust.Address;
+                asiakas.City = cust.City;
+                asiakas.Country = cust.Country;
+                asiakas.Phone = cust.Phone;
+                asiakas.PostalCode = cust.PostalCode;
+                asiakas.Region = cust.Region;
+                asiakas.Fax = cust.Fax;
+                asiakas.ContactTitle = cust.ContactTitle;
+                
+                db.SaveChanges(); // tallennus
+
+                //return Ok("Poistettu asiakas " + asiakas.CompanyNam);
+                return Ok($"Muokattu asiakasta {asiakas.CompanyName}");
+            }
+            return NotFound("Asiakasta id:llä " + id + " ei löydy.");
+
+        }
+
+
+
+
+
     }
 }
